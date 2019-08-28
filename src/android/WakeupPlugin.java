@@ -229,7 +229,10 @@ public class WakeupPlugin extends CordovaPlugin {
 				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				Log.d(LOG_TAG,"setting alarm at " + sdf.format(alarmDate.getTime()) + "; id " + id);
 
-				if (Build.VERSION.SDK_INT>=19) {
+				if (Build.VERSION.SDK_INT >= 23) {
+					// This method will be triggered even with doze mode activated (limited to once per 9 minutes per app)
+					alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarmDate.getTimeInMillis(), sender);
+				} else if (Build.VERSION.SDK_INT>=19) {
 					alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmDate.getTimeInMillis(), sender);
 				} else {
 					alarmManager.set(AlarmManager.RTC_WAKEUP, alarmDate.getTimeInMillis(), sender);
